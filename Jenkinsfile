@@ -2,6 +2,7 @@ pipeline {
     agent {
         label 'sandbox'
     }
+    
     stages {
         stage('Build') {
             steps {
