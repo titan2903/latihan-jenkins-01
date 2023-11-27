@@ -1,0 +1,40 @@
+pipeline {
+    agent {
+        label 'sandbox'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo "Build Apps"
+                sleep(5)
+            }
+        }
+        stage('Test'){
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                         echo "Unit Test"
+                         sleep(5)
+                    }
+                }
+                stage('Integration Test') {
+                    steps {
+                         echo "Integration Test"
+                         sleep(5)
+                    }
+                }
+                stage('Ent to end Test') {
+                    steps {
+                         echo "Ent to end Test"
+                         sleep(5)
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Deploy Apps"
+            }
+        }
+    }
+}
