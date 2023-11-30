@@ -1,3 +1,3 @@
 module latihan-jenkins
 
-go 1.20.4
+go 1.23
