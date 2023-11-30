@@ -5,11 +5,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Build Apps"
+                echo "Build Golang Apps"
                 sleep(5)
             }
         }
-        stage('Test Use Case'){
+        stage('Test'){
             parallel {
                 stage('Test A') {
                     steps {
