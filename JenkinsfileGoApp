@@ -13,7 +13,7 @@ pipeline {
                 sh '''
                 #!/bin/bash
                 go version
-                go build -o go-app main.go
+                GOCACHE=/tmp/ go build -o go-app main.go
                 '''
             }
         }
