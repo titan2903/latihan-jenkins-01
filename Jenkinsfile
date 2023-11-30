@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Build Apps"
+                echo "Build Apps Test"
                 sleep(5)
             }
         }
