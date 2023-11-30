@@ -13,7 +13,8 @@ pipeline {
                 sh '''
                 #!/bin/bash
                 go version
-                GOCACHE=/tmp/ go build -o go-app main.go
+                # Fix `failed to initialize build cache at /.cache/go-build: mkdir /.cache: permission denied` and Compile go for Linux
+                GOCACHE=/tmp/ GOOS=linux GOARCH=amd64 go build -o go-app main.go
                 '''
             }
         }
