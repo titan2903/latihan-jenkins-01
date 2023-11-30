@@ -1,18 +1,24 @@
 pipeline {
-    agent {
-        label 'sandbox'
-    }
+    agent any
     stages {
         stage('Build') {
+            agent {
+                docker {
+                    image 'golang:alpine3.16'
+                    label 'sandbox'
+                }
+            }
             steps {
-                echo "Build Golang Apps"
-                sleep(5)
+                echo "Build Apps"
+                sh '''
+                #!/bin/bash
+                go version
+                '''
             }
         }
         stage('Test'){
             steps {
                 echo "Test Golang Apps"
-                sleep(5)
             }
         }
         stage('Deploy') {
