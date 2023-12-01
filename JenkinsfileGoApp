@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment {
         WEBHOOK = credentials('WEBHOOK_URL_DISCORD')
-        GOAPP_PATH = '/home/titan/jenkins/workspace/jenkins-04/go-app-pipeline'
     }
     
     stages {
