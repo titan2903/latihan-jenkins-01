@@ -34,7 +34,12 @@ pipeline {
                 echo "Deploy Golang Apps"
                 // Unstash go-app
                 unstash name: 'GOAPP_ARTIFACT'
+                // Stop goapp.service running in background
+                sh 'scp -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY go-app titan@192.168.1.118 "sudo systemctl stop goapp.service"'
+                // Move go app to golang server
                 sh 'scp -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY go-app titan@192.168.1.118:~/go-app'
+                // Start goapp.service running in background
+                sh 'scp -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY go-app titan@192.168.1.118 "sudo systemctl stop goapp.service"'
             }
         }
     }
