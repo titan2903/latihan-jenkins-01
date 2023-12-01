@@ -37,10 +37,10 @@ pipeline {
                 echo "Test Golang Apps"
                 script {
                      // Unstash go-app
-                    unstash name: 'GOAPP_ARTIFACT'
+                    // unstash name: 'GOAPP_ARTIFACT'
 
                     // Run tests
-                    sh 'docker run -v $PWD:$GOAPP_PATH -w $GOAPP_PATH golang:1.21.4-alpine3.18 go test ./...'
+                    sh 'docker run -v $PWD:$GOAPP_PATH -w $GOAPP_PATH golang:1.21.4-alpine3.18 go test -v ./...'
                 }
             }
         }
