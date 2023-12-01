@@ -41,7 +41,7 @@ func getEnvHandler(w http.ResponseWriter, r *http.Request) {
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	// response body health check
 	response := &HealthResponse{
-		Message: "Health Check",
+		Message: "Health Check API",
 		Status:  "Ok",
 		Code:    http.StatusOK,
 	}
