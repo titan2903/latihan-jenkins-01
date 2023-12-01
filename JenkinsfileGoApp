@@ -35,11 +35,11 @@ pipeline {
                 // Unstash go-app
                 unstash name: 'GOAPP_ARTIFACT'
                 // Stop goapp.service running in background
-                sh 'scp -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "sudo systemctl stop goapp.service"'
+                // sh 'scp -o StrictHostKeyChecking=no -i "$GOAPP_SSH_KEY" titan@192.168.1.118 "sudo systemctl stop goapp.service"'
                 // Move go app to golang server
-                sh 'scp -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY go-app titan@192.168.1.118:~/go-app'
+                sh 'scp -o StrictHostKeyChecking=no -i "$GOAPP_SSH_KEY" go-app titan@192.168.1.118:~/go-app'
                 // Start goapp.service running in background
-                sh 'scp -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "sudo systemctl start goapp.service"'
+                sh 'scp -o StrictHostKeyChecking=no -i "$GOAPP_SSH_KEY" titan@192.168.1.118 "sudo systemctl start goapp.service"'
             }
         }
     }

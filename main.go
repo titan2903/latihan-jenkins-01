@@ -62,7 +62,7 @@ func main() {
 	http.HandleFunc("/getenv", getEnvHandler)
 	http.HandleFunc("/health", healthCheckHandler)
 
-	port := 8050
+	port := 5000
 	fmt.Printf("Server is running on :%d\n", port)
 
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
