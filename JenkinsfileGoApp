@@ -45,10 +45,6 @@ pipeline {
                 // sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "$PASSWORD_HOST_SERVER" | sudo -S systemctl stop goapps.service"'
                 sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "sudo systemctl stop goapps.service"'
 
-                // Remove binary go-app if exists
-                // sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "$PASSWORD_HOST_SERVER" | sudo -S rm -rf /home/titan/go-app"'
-                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "sudo rm -rf go-app"'
-
                 // Move go app to golang server
                 sh 'scp -o StrictHostKeyChecking=no -i "$GOAPP_SSH_KEY" go-app titan@192.168.1.118:~/go-app'
 

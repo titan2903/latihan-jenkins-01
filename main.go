@@ -42,7 +42,7 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	// response body health check
 	response := &HealthResponse{
 		Message: "Health Check",
-		Status:  "Successfully",
+		Status:  "Ok",
 		Code:    http.StatusOK,
 	}
 
