@@ -49,16 +49,16 @@ pipeline {
                 sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "$PASSWORD_HOST_SERVER" | sudo -S systemctl start goapps.service"'
             }
         }
+    }
 
-        post {
-            success {
-                echo "Post Success"
-                discordSend description: "Jenkins Pipeline Deploy", footer: "Deploy Success", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "$WEBHOOK"
-            }
-            failure {
-                echo "Post Failure"
-                discordSend description: "Jenkins Pipeline Deploy", footer: "Deploy Failure", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "$WEBHOOK"
-            }
+    post {
+        success {
+            echo "Post Success"
+            discordSend description: "Jenkins Pipeline Deploy", footer: "Deploy Success", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "$WEBHOOK"
+        }
+        failure {
+            echo "Post Failure"
+            discordSend description: "Jenkins Pipeline Deploy", footer: "Deploy Failure", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "$WEBHOOK"
         }
     }
 }
