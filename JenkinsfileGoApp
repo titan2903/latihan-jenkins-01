@@ -29,17 +29,18 @@ pipeline {
             environment {
                 GOAPP_SSH_KEY = credentials('goapp-rsa')
                 DISCORD_NOTIF = credentials('WEBHOOK_URL_DISCORD')
+                PASSWORD_HOST_SERVER = credentials('password-host-server')
             }
             steps {
                 echo "Deploy Golang Apps"
                 // Unstash go-app
                 unstash name: 'GOAPP_ARTIFACT'
                 // Stop goapp.service running in background
-                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "sudo systemctl stop goapps.service"'
+                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "PASSWORD_HOST_SERVER" | sudo -S systemctl stop goapps.service"'
                 // Move go app to golang server
                 sh 'scp -o StrictHostKeyChecking=no -i "$GOAPP_SSH_KEY" go-app titan@192.168.1.118:~/go-app'
                 // Start goapp.service running in background
-                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "sudo systemctl start goapps.service"'
+                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "PASSWORD_HOST_SERVER" | sudo -S systemctl start goapps.service"'
             }
         }
     }
