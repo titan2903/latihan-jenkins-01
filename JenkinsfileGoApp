@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         WEBHOOK = credentials('WEBHOOK_URL_DISCORD')
+        GOAPP_PATH = '/home/titan/jenkins/workspace/jenkins-04/go-app-pipeline'
     }
     
     stages {
@@ -25,9 +26,19 @@ pipeline {
             }
         }
 
-        stage('Test'){
+        stage('Test') {
+            agent {
+                docker {
+                    image 'golang:1.21.4-alpine3.18'
+                    label 'sandbox'
+                }
+            }
             steps {
                 echo "Test Golang Apps"
+                script {
+                    // Run tests
+                    sh 'docker run -v $PWD:$GOAPP_PATH -w $GOAPP_PATH golang:1.21.4-alpine3.18 go test ./...'
+                }
             }
         }
 
