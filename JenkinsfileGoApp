@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        WEBHOOK = credentials('WEBHOOK_URL_DISCORD')
+    }
+    
     stages {
         stage('Build') {
             agent {
@@ -20,11 +24,13 @@ pipeline {
                 stash includes: 'go-app', name: 'GOAPP_ARTIFACT'
             }
         }
+
         stage('Test'){
             steps {
                 echo "Test Golang Apps"
             }
         }
+
         stage('Deploy') {
             environment {
                 GOAPP_SSH_KEY = credentials('goapp-rsa')
@@ -36,11 +42,22 @@ pipeline {
                 // Unstash go-app
                 unstash name: 'GOAPP_ARTIFACT'
                 // Stop goapp.service running in background
-                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "PASSWORD_HOST_SERVER" | sudo -S systemctl stop goapps.service"'
+                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "$PASSWORD_HOST_SERVER" | sudo -S systemctl stop goapps.service"'
                 // Move go app to golang server
                 sh 'scp -o StrictHostKeyChecking=no -i "$GOAPP_SSH_KEY" go-app titan@192.168.1.118:~/go-app'
                 // Start goapp.service running in background
-                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "PASSWORD_HOST_SERVER" | sudo -S systemctl start goapps.service"'
+                sh 'ssh -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY titan@192.168.1.118 "echo "$PASSWORD_HOST_SERVER" | sudo -S systemctl start goapps.service"'
+            }
+        }
+
+        post {
+            success {
+                echo "Post Success"
+                discordSend description: "Jenkins Pipeline Deploy", footer: "Deploy Success", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "$WEBHOOK"
+            }
+            failure {
+                echo "Post Failure"
+                discordSend description: "Jenkins Pipeline Deploy", footer: "Deploy Failure", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "$WEBHOOK"
             }
         }
     }
