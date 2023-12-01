@@ -6,6 +6,19 @@ pipeline {
     }
     
     stages {
+        stage('Test') {
+            agent {
+                docker {
+                    image 'golang:1.21.4-alpine3.18'
+                    label 'sandbox'
+                }
+            }
+            steps {
+                echo "Test Golang Apps"
+                sh 'GOCACHE=/tmp/ go test -v ./...'
+            }
+        }
+
         stage('Build') {
             agent {
                 docker {
@@ -22,31 +35,7 @@ pipeline {
                 GOCACHE=/tmp/ GOOS=linux GOARCH=amd64 go build -o go-app main.go
                 '''
                 // Stash go-app
-                sh 'GOCACHE=/tmp/ go test -v ./...'
                 stash includes: 'go-app', name: 'GOAPP_ARTIFACT'
-            }
-        }
-
-        stage('Test') {
-            agent {
-                docker {
-                    image 'golang:1.21.4-alpine3.18'
-                    label 'sandbox'
-                }
-            }
-            steps {
-                echo "Test Golang Apps"
-                script {
-                     // Unstash go-app
-                    // unstash name: 'GOAPP_ARTIFACT'
-
-                    // Run tests
-                    // sh 'docker --version'
-                    // sh 'docker run -v $PWD:$GOAPP_PATH -w $GOAPP_PATH golang:1.21.4-alpine3.18 go test -v ./...'
-                    // Run tests
-                    sh '/usr/bin/docker --version'
-                    sh '/usr/bin/docker run -v $PWD:$GOAPP_PATH -w $GOAPP_PATH golang:1.21.4-alpine3.18 go test -v ./...'
-                }
             }
         }
 
