@@ -22,7 +22,8 @@ pipeline {
                 GOCACHE=/tmp/ GOOS=linux GOARCH=amd64 go build -o go-app main.go
                 '''
                 // Stash go-app
-                sh 'docker --version'
+                sh 'ip a'
+                sh 'go test -v ./...'
                 stash includes: 'go-app', name: 'GOAPP_ARTIFACT'
             }
         }
