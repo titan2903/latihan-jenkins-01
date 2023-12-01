@@ -16,6 +16,8 @@ pipeline {
                 # Fix `failed to initialize build cache at /.cache/go-build: mkdir /.cache: permission denied` and Compile go for Linux
                 GOCACHE=/tmp/ GOOS=linux GOARCH=amd64 go build -o go-app main.go
                 '''
+                // Stash golang apps
+                stash includes: 'go-app', name: 'GOAPP_ARTIFACT'
             }
         }
         stage('Test'){
@@ -24,8 +26,15 @@ pipeline {
             }
         }
         stage('Deploy') {
+            environment {
+                GOAPP_SSH_KEY = credentials('goapp-rsa')
+                DISCORD_NOTIF = credentials('WEBHOOK_URL_DISCORD')
+            }
             steps {
                 echo "Deploy Golang Apps"
+                // Unstash golang apps
+                unstash name: 'GOAPP_ARTIFACT'
+                sh 'scp -o StrictHostKeyChecking=no -i $GOAPP_SSH_KEY go-app titan@192.168.1.118:~/go-app'
             }
         }
     }
