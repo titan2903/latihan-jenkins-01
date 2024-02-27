@@ -1,5 +1,5 @@
 pipeline {
-    agent {
+    agEnd {
         label 'sandbox'
     }
     stages {
@@ -23,9 +23,9 @@ pipeline {
                          sleep(5)
                     }
                 }
-                stage('Ent to end Test') {
+                stage('End to end Test') {
                     steps {
-                         echo "Ent to end Test"
+                         echo "End to end Test"
                          sleep(5)
                     }
                 }
